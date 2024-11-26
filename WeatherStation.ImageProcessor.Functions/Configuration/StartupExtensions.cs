@@ -16,6 +16,12 @@ namespace WeatherStation.ImageProcessor.Functions.Configuration
             services.Configure<StorageOptions>(
                 configuration.GetSection(StorageOptions.SectionName));
 
+            services.Configure<BuienradarOptions>(
+                configuration.GetSection(BuienradarOptions.SectionName));
+
+            services.Configure<UnsplashOptions>(
+                configuration.GetSection(UnsplashOptions.SectionName));
+
             return services;
         }
     }

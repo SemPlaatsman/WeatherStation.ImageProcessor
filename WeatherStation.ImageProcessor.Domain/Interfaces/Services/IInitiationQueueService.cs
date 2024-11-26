@@ -2,6 +2,6 @@
 {
     public interface IInitiationQueueService
     {
-        Task SendInitiateImageGenerationMessageAsync(string initiateImageGenerationMessage, CancellationToken cancellationToken);
+        Task EnqueueImageGenerationInitiationAsync(string jobId, CancellationToken cancellationToken);
     }
 }

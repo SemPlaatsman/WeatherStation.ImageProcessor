@@ -1,7 +1,6 @@
 ﻿using Azure;
 using Azure.Data.Tables;
 using Microsoft.Extensions.Options;
-using System.Text;
 using WeatherStation.ImageProcessor.Domain.Entities;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Repositories;
 using WeatherStation.ImageProcessor.Infrastructure.Options;

@@ -1,11 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using WeatherStation.ImageProcessor.Domain.Entities;
 using WeatherStation.ImageProcessor.Domain.Enums;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Facades;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Repositories;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Services;
-using WeatherStation.ImageProcessor.Infrastructure.Models;
 
 namespace WeatherStation.ImageProcessor.Infrastructure.Facades
 {
@@ -44,10 +42,8 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
             await _jobRepository.CreateJobAsync(job, cancellationToken);
             _logger.LogInformation("Created new job with ID: {JobId}", jobId);
 
-            var message = new InitiateImageGenerationMessage(jobId);
-            await _initiationQueueService.SendInitiateImageGenerationMessageAsync(
-                JsonSerializer.Serialize(message),
-                cancellationToken);
+            await _initiationQueueService.EnqueueImageGenerationInitiationAsync(
+                jobId, cancellationToken);
 
             _logger.LogInformation("Sent initiation message for job ID: {JobId}", jobId);
 

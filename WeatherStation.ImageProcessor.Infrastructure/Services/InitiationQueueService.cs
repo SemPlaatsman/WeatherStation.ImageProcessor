@@ -4,6 +4,8 @@ using Microsoft.Extensions.Options;
 using WeatherStation.ImageProcessor.Infrastructure.Options;
 using WeatherStation.ImageProcessor.Infrastructure.Util;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Services;
+using WeatherStation.ImageProcessor.Infrastructure.Models;
+using System.Text.Json;
 
 namespace WeatherStation.ImageProcessor.Infrastructure.Services
 {
@@ -13,11 +15,12 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
     {
         private readonly QueueClient _queueClient = InitializeQueueClient(options.Value);
 
-        public Task SendInitiateImageGenerationMessageAsync(string initiateImageGenerationMessage, CancellationToken cancellationToken) =>
+        public Task EnqueueImageGenerationInitiationAsync(string jobId, CancellationToken cancellationToken) =>
             logger.ExecuteWithExceptionLoggingAsync(
-                () => _queueClient.SendMessageAsync(initiateImageGenerationMessage, cancellationToken),
-                "Error sending image generation initation message {MessageContent}",
-                initiateImageGenerationMessage);
+                () => 
+                    _queueClient.SendMessageAsync(JsonSerializer.Serialize(new InitiateImageGenerationMessage(jobId)), cancellationToken),
+                "Error sending image generation initation message with job ID: {jobId}",
+                jobId);
 
         private static QueueClient InitializeQueueClient(StorageOptions options)
         {

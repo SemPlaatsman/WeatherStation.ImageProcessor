@@ -29,5 +29,31 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Util
                 throw;
             }
         }
+
+        public static Task ExecuteWithExceptionLoggingAsync(
+            this ILogger logger,
+            Func<Task> operation,
+            string errorMessage,
+            params object[] args)
+        {
+            return ExecuteWithExceptionLoggingAsync(
+                operation,
+                ex => logger.LogError(ex, errorMessage, args));
+        }
+
+        private static async Task ExecuteWithExceptionLoggingAsync(
+            Func<Task> operation,
+            Action<Exception> logError)
+        {
+            try
+            {
+                await operation();
+            }
+            catch (Exception ex)
+            {
+                logError(ex);
+                throw;
+            }
+        }
     }
 }
