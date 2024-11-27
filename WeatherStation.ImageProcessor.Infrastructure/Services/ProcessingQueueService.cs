@@ -31,7 +31,6 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
             var message = new ProcessWeatherImageMessage
             {
                 JobId = jobId,
-                StationId = stationId,
                 WeatherData = weatherData
             };
 

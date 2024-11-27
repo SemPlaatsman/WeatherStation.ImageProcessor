@@ -1,8 +1,8 @@
 ﻿using WeatherStation.ImageProcessor.Domain.Entities;
 
-namespace WeatherStation.ImageProcessor.Domain.Interfaces.Clients
+namespace WeatherStation.ImageProcessor.Domain.Interfaces.Services
 {
-    public interface IImageClient
+    public interface IImageService
     {
         Task<WeatherImage> GetRandomImageAsync(CancellationToken cancellationToken = default);
 

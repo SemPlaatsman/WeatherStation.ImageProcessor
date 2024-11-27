@@ -30,16 +30,14 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
             };
         }
 
-        public async Task<WeatherImage> GetRandomImageAsync(
-            string orientation,
-            CancellationToken cancellationToken = default)
+        public async Task<WeatherImage> GetRandomImageAsync(CancellationToken cancellationToken = default)
         {
             try
             {
                 var queryParams = new Dictionary<string, string>
                 {
                     ["client_id"] = _options.Value.AccessKey,
-                    ["orientation"] = orientation,
+                    ["orientation"] = _options.Value.Orientation,
                     ["query"] = "weather landscape",
                     ["content_filter"] = "high"
                 };
@@ -64,7 +62,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
 
                 return new WeatherImage
                 {
-                    ImageUrl = response.Urls.Regular,
+                    Url = response.Urls.Regular,
                     Metadata = new WeatherImageMetadata
                     {
                         Id = response.Id,

@@ -49,7 +49,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
                 {
                     await _processingQueueService.EnqueueWeatherImageProcessingAsync(
                         jobId,
-                        station.StationId,
+                        station.Id,
                         station,
                         cancellationToken);
                 }

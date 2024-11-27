@@ -10,6 +10,7 @@
 
         // Blob storage
         public string BlobStorageConnection { get; set; } = default!;
+        public string ImageContainerName { get; set; } = "weather-images";
 
         // Queue storage
         public string QueueStorageConnection { get; set; } = default!;

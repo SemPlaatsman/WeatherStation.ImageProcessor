@@ -2,8 +2,8 @@
 {
     public record WeatherStation(
         // Station Information
-        int StationId,
-        string StationName,
+        int Id,
+        string Name,
         string Region,
         double Latitude,
         double Longitude,

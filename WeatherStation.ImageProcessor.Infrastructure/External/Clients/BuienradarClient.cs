@@ -67,7 +67,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
             CancellationToken cancellationToken = default)
         {
             var allStations = await GetWeatherDataAsync(cancellationToken);
-            return allStations.Where(s => stationIds.Contains(s.StationId));
+            return allStations.Where(s => stationIds.Contains(s.Id));
         }
 
         private static bool IsValidStation(StationMeasurement station) =>
@@ -79,8 +79,8 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
 
         private static Domain.Entities.WeatherStation MapToWeatherStation(StationMeasurement measurement) =>
             new(
-                StationId: measurement.StationId,
-                StationName: measurement.StationName,
+                Id: measurement.StationId,
+                Name: measurement.StationName,
                 Region: measurement.Region ?? "Onbekend",
                 Latitude: measurement.Latitude,
                 Longitude: measurement.Longitude,

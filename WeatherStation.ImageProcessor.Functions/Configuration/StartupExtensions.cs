@@ -22,6 +22,9 @@ namespace WeatherStation.ImageProcessor.Functions.Configuration
             services.Configure<UnsplashOptions>(
                 configuration.GetSection(UnsplashOptions.SectionName));
 
+            services.Configure<ImageGenerationOptions>(
+                configuration.GetSection(ImageGenerationOptions.SectionName));
+
             return services;
         }
     }

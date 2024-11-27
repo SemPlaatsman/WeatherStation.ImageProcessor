@@ -7,5 +7,6 @@ namespace WeatherStation.ImageProcessor.Domain.Interfaces.Repositories
         Task<WeatherJob> CreateJobAsync(WeatherJob job, CancellationToken cancellationToken = default);
         Task<WeatherJob?> GetJobAsync(string jobId, CancellationToken cancellationToken = default);
         Task UpdateJobAsync(WeatherJob job, CancellationToken cancellationToken = default);
+        Task IncrementCompletedImagesAsync(string jobId, CancellationToken cancellationToken = default);
     }
 }

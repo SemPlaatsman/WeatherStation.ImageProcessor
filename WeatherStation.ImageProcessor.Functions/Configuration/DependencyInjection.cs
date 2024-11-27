@@ -32,14 +32,18 @@ namespace WeatherStation.ImageProcessor.Functions.Configuration
             // Register facades
             services.AddScoped<IJobInitiationFacade, JobInitiationFacade>();
             services.AddScoped<IWeatherJobFacade, WeatherJobFacade>();
+            services.AddScoped<IImageProcessingFacade, ImageProcessingFacade>();
 
             // Register services
             services.AddScoped<IInitiationQueueService, InitiationQueueService>();
             services.AddScoped<IProcessingQueueService, ProcessingQueueService>();
             services.AddScoped<IWeatherService, WeatherService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IImageGenerationService, ImageGenerationService>();
 
             // Register repositories
             services.AddScoped<IJobRepository, JobRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
 
             return services;
         }
