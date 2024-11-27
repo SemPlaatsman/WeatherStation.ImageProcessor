@@ -15,7 +15,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
     {
         private readonly QueueClient _queueClient = InitializeQueueClient(options.Value);
 
-        public Task EnqueueImageGenerationInitiationAsync(string jobId, CancellationToken cancellationToken) =>
+        public Task EnqueueImageGenerationInitiationAsync(string jobId, int? numberOfStations, CancellationToken cancellationToken) =>
             logger.ExecuteWithExceptionLoggingAsync(
                 () => 
                     _queueClient.SendMessageAsync(JsonSerializer.Serialize(new InitiateImageGenerationMessage(jobId)), cancellationToken),

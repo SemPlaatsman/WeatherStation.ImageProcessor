@@ -38,7 +38,8 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
                 ["Status"] = job.Status,
                 ["CreatedAt"] = job.CreatedAt,
                 ["CompletedImages"] = job.CompletedImages,
-                ["TotalImages"] = job.TotalImages
+                ["TotalImages"] = job.TotalImages,
+                ["RequestedStations"] = job.RequestedStations
             };
 
             await _tableClient.AddEntityAsync(entity, cancellationToken);
@@ -58,7 +59,8 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
                     Status = response.Value.GetString("Status"),
                     CreatedAt = response.Value.GetDateTime("CreatedAt") ?? DateTime.Now,
                     CompletedImages = response.Value.GetInt32("CompletedImages") ?? 0,
-                    TotalImages = response.Value.GetInt32("TotalImages")
+                    TotalImages = response.Value.GetInt32("TotalImages"),
+                    RequestedStations = response.Value.GetInt32("RequestedStations")
                 };
             }
             catch (RequestFailedException)
@@ -76,7 +78,8 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
                 ["Status"] = job.Status,
                 ["CreatedAt"] = job.CreatedAt,
                 ["CompletedImages"] = job.CompletedImages,
-                ["TotalImages"] = job.TotalImages
+                ["TotalImages"] = job.TotalImages,
+                ["RequestedStations"] = job.RequestedStations
             };
 
             await _tableClient.UpdateEntityAsync(entity, ETag.All, TableUpdateMode.Replace, cancellationToken);

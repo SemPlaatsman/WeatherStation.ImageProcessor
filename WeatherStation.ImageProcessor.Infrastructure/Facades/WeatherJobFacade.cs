@@ -29,17 +29,20 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
         public Task ProcessJobAsync(string jobId, CancellationToken cancellationToken = default) =>
             _logger.ExecuteWithExceptionLoggingAsync(async () =>
             {
-                // Get weather data
-                var stations = await _weatherService.GetAllWeatherStationsAsync(cancellationToken);
-                var stationsList = stations.ToList();
-
-                // Update job status
+                // Get job
                 var job = await _jobRepository.GetJobAsync(jobId, cancellationToken);
                 if (job == null)
                 {
                     throw new InvalidOperationException($"Job {jobId} not found");
                 }
 
+                // Get weather stations based on requested count
+                var stations = await _weatherService.GetWeatherStationsAsync(
+                    job.RequestedStations,
+                    cancellationToken);
+                var stationsList = stations.ToList();
+
+                // Update job
                 job.Status = JobStatus.Processing.ToString();
                 job.TotalImages = stationsList.Count;
                 await _jobRepository.UpdateJobAsync(job, cancellationToken);

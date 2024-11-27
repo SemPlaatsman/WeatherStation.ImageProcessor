@@ -7,5 +7,6 @@
         public DateTime CreatedAt { get; set; }
         public int CompletedImages { get; set; }
         public int? TotalImages { get; set; }
+        public int? RequestedStations { get; set; }
     }
 }

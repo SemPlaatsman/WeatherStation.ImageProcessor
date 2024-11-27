@@ -18,11 +18,23 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
             _logger = logger;
         }
 
-        public Task<IEnumerable<Domain.Entities.WeatherStation>> GetAllWeatherStationsAsync(
+        public async Task<IEnumerable<Domain.Entities.WeatherStation>> GetWeatherStationsAsync(
+            int? numberOfStations = null,
             CancellationToken cancellationToken = default) =>
-            _logger.ExecuteWithExceptionLoggingAsync(
-                () => _weatherClient.GetWeatherDataAsync(cancellationToken),
-                "Failed to get weather data for all stations");
+            await _logger.ExecuteWithExceptionLoggingAsync(
+                async () =>
+                {
+                    var allStations = await _weatherClient.GetWeatherDataAsync(cancellationToken);
+                    if (!numberOfStations.HasValue)
+                        return allStations;
+                    var stationsList = allStations.ToList();
+                    var requestedCount = Math.Min(numberOfStations.Value, stationsList.Count);
+                    return stationsList
+                        .OrderBy(_ => Random.Shared.Next())
+                        .Take(requestedCount);
+                },
+                "Failed to get weather data. RequestedStations: {RequestedStations}",
+                numberOfStations?.ToString() ?? "all");
 
         public Task<Domain.Entities.WeatherStation?> GetWeatherStationAsync(
             int stationId,

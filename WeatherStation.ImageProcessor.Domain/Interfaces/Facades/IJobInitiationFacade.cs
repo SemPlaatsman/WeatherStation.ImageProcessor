@@ -2,6 +2,8 @@
 {
     public interface IJobInitiationFacade
     {
-        Task<string> InitiateWeatherJobAsync(CancellationToken cancellationToken = default);
+        Task<string> InitiateWeatherJobAsync(
+            int? numberOfStations = null,
+            CancellationToken cancellationToken = default);
     }
 }
