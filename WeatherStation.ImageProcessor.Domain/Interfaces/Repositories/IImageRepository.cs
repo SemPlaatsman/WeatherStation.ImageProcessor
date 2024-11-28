@@ -7,5 +7,8 @@
             string stationId,
             Stream imageStream,
             CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<(string StationId, string Url)>> GetImagesForJobAsync(
+            string jobId, CancellationToken cancellationToken = default);
     }
 }

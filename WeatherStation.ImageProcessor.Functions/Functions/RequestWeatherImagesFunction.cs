@@ -5,8 +5,8 @@ using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
+using WeatherStation.ImageProcessor.Domain.DTOs.Request;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Facades;
-using WeatherStation.ImageProcessor.Functions.Models.Request;
 
 namespace WeatherStation.ImageProcessor.Functions.Functions
 {

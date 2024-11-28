@@ -26,5 +26,21 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
             var blobClient = _containerClient.GetBlobClient($"{jobId}/{stationId}.jpg");
             await blobClient.UploadAsync(imageStream, overwrite: true, cancellationToken);
         }
+
+        public async Task<IEnumerable<(string StationId, string Url)>> GetImagesForJobAsync(
+            string jobId, CancellationToken cancellationToken = default)
+        {
+            var images = new List<(string StationId, string Url)>();
+            var prefix = $"{jobId}/";
+
+            await foreach (var blob in _containerClient.GetBlobsAsync(prefix: prefix, cancellationToken: cancellationToken))
+            {
+                var stationId = Path.GetFileNameWithoutExtension(blob.Name.Substring(prefix.Length));
+                var blobClient = _containerClient.GetBlobClient(blob.Name);
+                images.Add((stationId, blobClient.Uri.ToString()));
+            }
+
+            return images;
+        }
     }
 }

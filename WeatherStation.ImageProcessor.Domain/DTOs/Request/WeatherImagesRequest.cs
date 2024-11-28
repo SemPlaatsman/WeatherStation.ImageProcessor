@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WeatherStation.ImageProcessor.Functions.Models.Request
+namespace WeatherStation.ImageProcessor.Domain.DTOs.Request
 {
     public record WeatherImagesRequest
     {
