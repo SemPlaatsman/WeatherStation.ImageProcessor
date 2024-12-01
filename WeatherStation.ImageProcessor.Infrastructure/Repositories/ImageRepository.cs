@@ -12,7 +12,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
 
         public ImageRepository(IOptions<StorageOptions> options)
         {
-            var blobServiceClient = new BlobServiceClient(options.Value.BlobStorageConnection);
+            BlobServiceClient blobServiceClient = new(options.Value.BlobStorageConnection);
             _containerClient = blobServiceClient.GetBlobContainerClient(options.Value.ImageContainerName);
             _containerClient.CreateIfNotExists(PublicAccessType.Blob);
         }
@@ -23,20 +23,20 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
             Stream imageStream,
             CancellationToken cancellationToken = default)
         {
-            var blobClient = _containerClient.GetBlobClient($"{jobId}/{stationId}.jpg");
+            BlobClient blobClient = _containerClient.GetBlobClient($"{jobId}/{stationId}.jpg");
             await blobClient.UploadAsync(imageStream, overwrite: true, cancellationToken);
         }
 
         public async Task<IEnumerable<(string StationId, string Url)>> GetImagesForJobAsync(
             string jobId, CancellationToken cancellationToken = default)
         {
-            var images = new List<(string StationId, string Url)>();
-            var prefix = $"{jobId}/";
+            List<(string StationId, string Url)> images = new();
+            string prefix = $"{jobId}/";
 
-            await foreach (var blob in _containerClient.GetBlobsAsync(prefix: prefix, cancellationToken: cancellationToken))
+            await foreach (BlobItem blob in _containerClient.GetBlobsAsync(prefix: prefix, cancellationToken: cancellationToken))
             {
-                var stationId = Path.GetFileNameWithoutExtension(blob.Name.Substring(prefix.Length));
-                var blobClient = _containerClient.GetBlobClient(blob.Name);
+                string? stationId = Path.GetFileNameWithoutExtension(blob.Name.Substring(prefix.Length));
+                BlobClient blobClient = _containerClient.GetBlobClient(blob.Name);
                 images.Add((stationId, blobClient.Uri.ToString()));
             }
 

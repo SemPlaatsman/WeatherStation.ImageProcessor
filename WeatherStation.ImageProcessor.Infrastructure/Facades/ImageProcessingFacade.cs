@@ -53,7 +53,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
                     using (baseImageStream)
                     {
                         // Generate weather image
-                        using var weatherImageStream = await _imageGenerationService.GenerateWeatherImageAsync(
+                        using Stream weatherImageStream = await _imageGenerationService.GenerateWeatherImageAsync(
                             baseImageStream,
                             weatherStation,
                             weatherImage.Metadata.Attribution,

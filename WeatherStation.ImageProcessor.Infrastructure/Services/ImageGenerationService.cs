@@ -36,31 +36,31 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
             _logger.ExecuteWithExceptionLoggingAsync<Stream>(
                 async () =>
                 {
-                    using var image = await Image.LoadAsync(baseImageStream, cancellationToken);
+                    using Image image = await Image.LoadAsync(baseImageStream, cancellationToken);
 
-                    var overlayHeight = 150;
-                    var overlay = new Image<Rgba32>(image.Width, overlayHeight);
+                    ushort overlayHeight = 150;
+                    Image<Rgba32> overlay = new(image.Width, overlayHeight);
 
-                    var font = _fonts.Get(_options.FontName).CreateFont(_options.FontSize);
-                    var smallFont = _fonts.Get(_options.FontName).CreateFont(_options.FontSize * 0.8f);
+                    Font font = _fonts.Get(_options.FontName).CreateFont(_options.FontSize);
+                    Font smallFont = _fonts.Get(_options.FontName).CreateFont(_options.FontSize * 0.8f);
 
                     overlay.Mutate(x => x.Fill(Color.ParseHex(_options.OverlayColor)));
 
-                    var textOptions = new TextOptions(font)
+                    TextOptions textOptions = new(font)
                     {
                         WordBreaking = WordBreaking.Standard,
                         WrappingLength = image.Width - 40
                     };
 
-                    var smallTextOptions = new TextOptions(smallFont)
+                    TextOptions smallTextOptions = new(smallFont)
                     {
                         WordBreaking = WordBreaking.Standard,
                         WrappingLength = image.Width - 40
                     };
 
-                    var attributionSize = TextMeasurer.MeasureSize(attribution, smallTextOptions);
-                    var weatherText = CreateWeatherText(weatherStation);
-                    var textColor = Color.ParseHex(_options.TextColor);
+                    FontRectangle attributionSize = TextMeasurer.MeasureSize(attribution, smallTextOptions);
+                    string weatherText = CreateWeatherText(weatherStation);
+                    Color textColor = Color.ParseHex(_options.TextColor);
 
                     image.Mutate(x => x
                         .DrawImage(overlay, new Point(0, image.Height - overlayHeight), 0.8f)

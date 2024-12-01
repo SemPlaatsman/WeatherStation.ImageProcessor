@@ -28,13 +28,13 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
             Domain.Entities.WeatherStation weatherData,
             CancellationToken cancellationToken)
         {
-            var message = new ProcessWeatherImageMessage
+            ProcessWeatherImageMessage message = new()
             {
                 JobId = jobId,
                 WeatherData = weatherData
             };
 
-            var messageJson = JsonSerializer.Serialize(message);
+            string messageJson = JsonSerializer.Serialize(message);
 
             await _logger.ExecuteWithExceptionLoggingAsync(
                 () => _queueClient.SendMessageAsync(messageJson, cancellationToken),
@@ -44,7 +44,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
 
         private static QueueClient InitializeQueueClient(StorageOptions options)
         {
-            var client = new QueueClient(
+            QueueClient client = new(
                 options.QueueStorageConnection,
                 options.ProcessingQueueName,
                 new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });

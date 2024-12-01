@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using WeatherStation.ImageProcessor.Domain.Entities;
 using WeatherStation.ImageProcessor.Domain.Enums;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Facades;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Repositories;
@@ -30,25 +31,24 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
             _logger.ExecuteWithExceptionLoggingAsync(async () =>
             {
                 // Get job
-                var job = await _jobRepository.GetJobAsync(jobId, cancellationToken);
+                WeatherJob? job = await _jobRepository.GetJobAsync(jobId, cancellationToken);
                 if (job == null)
                 {
                     throw new InvalidOperationException($"Job {jobId} not found");
                 }
 
                 // Get weather stations based on requested count
-                var stations = await _weatherService.GetWeatherStationsAsync(
+                List<Domain.Entities.WeatherStation> stations = (await _weatherService.GetWeatherStationsAsync(
                     job.RequestedStations,
-                    cancellationToken);
-                var stationsList = stations.ToList();
+                    cancellationToken)).ToList();
 
                 // Update job
                 job.Status = JobStatus.Processing.ToString();
-                job.TotalImages = stationsList.Count;
+                job.TotalImages = stations.Count;
                 await _jobRepository.UpdateJobAsync(job, cancellationToken);
 
                 // Queue processing messages
-                foreach (var station in stationsList)
+                foreach (Domain.Entities.WeatherStation station in stations)
                 {
                     await _processingQueueService.EnqueueWeatherImageProcessingAsync(
                         jobId,

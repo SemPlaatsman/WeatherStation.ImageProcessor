@@ -3,6 +3,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using System.Net;
+using WeatherStation.ImageProcessor.Domain.DTOs.Response;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Facades;
 
 namespace WeatherStation.ImageProcessor.Functions.Functions
@@ -28,22 +29,22 @@ namespace WeatherStation.ImageProcessor.Functions.Functions
         {
             try
             {
-                var status = await _jobStatusFacade.GetJobStatusAsync(jobId, cancellationToken);
-                var response = req.CreateResponse(HttpStatusCode.OK);
+                JobStatusResponse status = await _jobStatusFacade.GetJobStatusAsync(jobId, cancellationToken);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
                 await response.WriteAsJsonAsync(status, cancellationToken);
                 return response;
             }
             catch (KeyNotFoundException ex)
             {
                 _logger.LogWarning(ex, "Job not found: {JobId}", jobId);
-                var response = req.CreateResponse(HttpStatusCode.NotFound);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.NotFound);
                 await response.WriteStringAsync($"Job with ID {jobId} not found");
                 return response;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error getting job status for {JobId}", jobId);
-                var response = req.CreateResponse(HttpStatusCode.InternalServerError);
+                HttpResponseData response = req.CreateResponse(HttpStatusCode.InternalServerError);
                 await response.WriteStringAsync("An error occurred while processing your request");
                 return response;
             }

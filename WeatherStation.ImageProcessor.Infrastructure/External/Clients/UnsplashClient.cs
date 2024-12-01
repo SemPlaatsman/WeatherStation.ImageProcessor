@@ -34,7 +34,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
         {
             try
             {
-                var queryParams = new Dictionary<string, string>
+                Dictionary<string, string> queryParams = new()
                 {
                     ["client_id"] = _options.Value.AccessKey,
                     ["orientation"] = _options.Value.Orientation,
@@ -42,10 +42,10 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
                     ["content_filter"] = "high"
                 };
 
-                var queryString = string.Join("&", queryParams.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
-                var requestUrl = $"{_options.Value.BaseUrl}?{queryString}";
+                string queryString = string.Join("&", queryParams.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value)}"));
+                string requestUrl = $"{_options.Value.BaseUrl}?{queryString}";
 
-                var response = await _httpClient.GetFromJsonAsync<UnsplashResponse>(
+                UnsplashResponse? response = await _httpClient.GetFromJsonAsync<UnsplashResponse>(
                     requestUrl,
                     _jsonOptions,
                     cancellationToken);
@@ -56,7 +56,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
                 }
 
                 // Register download
-                using var downloadRequest = new HttpRequestMessage(HttpMethod.Get, response.Links.DownloadLocation);
+                using HttpRequestMessage downloadRequest = new(HttpMethod.Get, response.Links.DownloadLocation);
                 downloadRequest.Headers.Add("client_id", _options.Value.AccessKey);
                 await _httpClient.SendAsync(downloadRequest, cancellationToken);
 

@@ -23,10 +23,10 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
             _logger.LogInformation("Starting weather job initiation process. RequestedStations: {RequestedStations}",
                 numberOfStations?.ToString() ?? "all");
 
-            var jobId = Guid.NewGuid().ToString();
+            string jobId = Guid.NewGuid().ToString();
             _logger.LogInformation("Generated new job ID: {JobId}", jobId);
 
-            var job = new WeatherJob
+            WeatherJob job = new()
             {
                 Id = jobId,
                 Status = JobStatus.Initiated.ToString(),

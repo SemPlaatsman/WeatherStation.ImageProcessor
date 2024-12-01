@@ -22,7 +22,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
         {
             _options = options.Value;
             _logger = logger;
-            var tableServiceClient = new TableServiceClient(_options.TableStorageConnection);
+            TableServiceClient tableServiceClient = new(_options.TableStorageConnection);
             _tableClient = tableServiceClient.GetTableClient(_options.JobTableName);
 
             // Create the table if it doesn't exist
@@ -31,7 +31,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
 
         public async Task<WeatherJob> CreateJobAsync(WeatherJob job, CancellationToken cancellationToken = default)
         {
-            var entity = new TableEntity
+            TableEntity entity = new()
             {
                 PartitionKey = _options.JobTableName,
                 RowKey = job.Id,
@@ -50,7 +50,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
         {
             try
             {
-                var response = await _tableClient.GetEntityAsync<TableEntity>(
+                Response<TableEntity> response = await _tableClient.GetEntityAsync<TableEntity>(
                     _options.JobTableName, jobId, cancellationToken: cancellationToken);
 
                 return new WeatherJob
@@ -71,7 +71,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
 
         public async Task UpdateJobAsync(WeatherJob job, CancellationToken cancellationToken = default)
         {
-            var entity = new TableEntity
+            TableEntity entity = new()
             {
                 PartitionKey = _options.JobTableName,
                 RowKey = job.Id,
@@ -99,13 +99,13 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
             string jobId,
             CancellationToken cancellationToken = default)
         {
-            var attempt = 0;
+            byte attempt = 0;
             while (attempt < MaxAttempts)
             {
                 try
                 {
-                    var entity = await GetAndValidateJobEntityAsync(jobId, cancellationToken);
-                    var (completedImages, totalImages) = ExtractImageCounts(entity);
+                    TableEntity entity = await GetAndValidateJobEntityAsync(jobId, cancellationToken);
+                    (int completedImages, int totalImages) = ExtractImageCounts(entity);
 
                     UpdateJobStatus(entity, completedImages + 1, totalImages);
                     await _tableClient.UpdateEntityAsync(
@@ -131,7 +131,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
             _logger.ExecuteWithExceptionLoggingAsync(
                 async () =>
                 {
-                    var response = await _tableClient.GetEntityAsync<TableEntity>(_options.JobTableName, jobId, cancellationToken: cancellationToken);
+                    Response<TableEntity> response = await _tableClient.GetEntityAsync<TableEntity>(_options.JobTableName, jobId, cancellationToken: cancellationToken);
                     if (response?.Value == null)
                         throw new InvalidOperationException($"Job {jobId} not found");
                     return response.Value;
@@ -145,9 +145,9 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
             _logger.ExecuteWithExceptionLoggingAsync(
                 () =>
                 {
-                    if (!entity.TryGetValue(propertyName, out var value) ||
+                    if (!entity.TryGetValue(propertyName, out object? value) ||
                         value == null ||
-                        !int.TryParse(value.ToString(), out var result))
+                        !int.TryParse(value.ToString(), out int result))
                     {
                         throw new InvalidOperationException($"Invalid {propertyName} value for job {entity.RowKey}");
                     }
@@ -167,11 +167,11 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Repositories
         private static TimeSpan CalculateBackoffDelay(int attempt)
         {
             // Base delay with exponential backoff (50ms, 100ms, 200ms)
-            var baseDelay = Math.Pow(2, attempt - 1) * 50;
+            double baseDelay = Math.Pow(2, attempt - 1) * 50;
 
             // Add random jitter between 0-50ms to prevent thundering herd
             // See: https://en.wikipedia.org/wiki/Thundering_herd_problem
-            var jitter = Jitter.Next(0, 50);
+            int jitter = Jitter.Next(0, 50);
 
             return TimeSpan.FromMilliseconds(baseDelay + jitter);
         }

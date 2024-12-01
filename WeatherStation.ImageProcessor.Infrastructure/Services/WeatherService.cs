@@ -24,11 +24,11 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
             await _logger.ExecuteWithExceptionLoggingAsync(
                 async () =>
                 {
-                    var allStations = await _weatherClient.GetWeatherDataAsync(cancellationToken);
+                    IEnumerable<Domain.Entities.WeatherStation> allStations = await _weatherClient.GetWeatherDataAsync(cancellationToken);
                     if (!numberOfStations.HasValue)
                         return allStations;
-                    var stationsList = allStations.ToList();
-                    var requestedCount = Math.Min(numberOfStations.Value, stationsList.Count);
+                    List<Domain.Entities.WeatherStation> stationsList = allStations.ToList();
+                    ushort requestedCount = (ushort)Math.Min(numberOfStations.Value, stationsList.Count);
                     return stationsList
                         .OrderBy(_ => Random.Shared.Next())
                         .Take(requestedCount);
@@ -41,7 +41,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
             CancellationToken cancellationToken = default) =>
             _logger.ExecuteWithExceptionLoggingAsync(
                 async () => {
-                    var stations = await _weatherClient.GetWeatherDataAsync(
+                    IEnumerable<Domain.Entities.WeatherStation> stations = await _weatherClient.GetWeatherDataAsync(
                         new[] { stationId },
                         cancellationToken);
                     return stations.FirstOrDefault();

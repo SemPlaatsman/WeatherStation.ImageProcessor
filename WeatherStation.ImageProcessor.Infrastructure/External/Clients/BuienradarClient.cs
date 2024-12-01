@@ -36,7 +36,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
             {
                 _logger.LogInformation("Fetching weather data from Buienradar");
 
-                var response = await _httpClient.GetFromJsonAsync<BuienradarResponse>(
+                BuienradarResponse? response = await _httpClient.GetFromJsonAsync<BuienradarResponse>(
                     _options.Value.Endpoint,
                     _jsonOptions,
                     cancellationToken);
@@ -46,7 +46,8 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
                     throw new Exception("Invalid response from Buienradar API");
                 }
 
-                var validStations = response.Actual.StationMeasurements
+                List<Domain.Entities.WeatherStation> validStations = response
+                    .Actual.StationMeasurements
                     .Where(IsValidStation)
                     .Select(MapToWeatherStation)
                     .ToList();
@@ -66,7 +67,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Clients
             IEnumerable<int> stationIds,
             CancellationToken cancellationToken = default)
         {
-            var allStations = await GetWeatherDataAsync(cancellationToken);
+            IEnumerable<Domain.Entities.WeatherStation> allStations = await GetWeatherDataAsync(cancellationToken);
             return allStations.Where(s => stationIds.Contains(s.Id));
         }
 

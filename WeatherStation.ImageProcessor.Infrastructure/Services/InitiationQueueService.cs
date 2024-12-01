@@ -24,7 +24,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Services
 
         private static QueueClient InitializeQueueClient(StorageOptions options)
         {
-            var client = new QueueClient(
+            QueueClient client = new(
                 options.QueueStorageConnection,
                 options.InitiationQueueName,
                 new QueueClientOptions { MessageEncoding = QueueMessageEncoding.Base64 });

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using WeatherStation.ImageProcessor.Domain.DTOs.Common;
 using WeatherStation.ImageProcessor.Domain.DTOs.Response;
+using WeatherStation.ImageProcessor.Domain.Entities;
 using WeatherStation.ImageProcessor.Domain.Enums;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Facades;
 using WeatherStation.ImageProcessor.Domain.Interfaces.Repositories;
@@ -26,14 +27,14 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
         public async Task<JobStatusResponse> GetJobStatusAsync(
             string jobId, CancellationToken cancellationToken = default)
         {
-            var job = await _jobRepository.GetJobAsync(jobId, cancellationToken);
+            WeatherJob? job = await _jobRepository.GetJobAsync(jobId, cancellationToken);
 
             if (job == null)
             {
                 throw new KeyNotFoundException($"Job with ID {jobId} not found");
             }
 
-            var response = new JobStatusResponse
+            JobStatusResponse response = new()
             {
                 Status = job.Status
             };
@@ -46,7 +47,7 @@ namespace WeatherStation.ImageProcessor.Infrastructure.Facades
                     Total = job.TotalImages ?? 0
                 };
 
-                var images = await _imageRepository.GetImagesForJobAsync(jobId, cancellationToken);
+                IEnumerable<(string StationId, string Url)> images = await _imageRepository.GetImagesForJobAsync(jobId, cancellationToken);
                 response.Images = images.Select(i => new ImageInfo
                 {
                     StationId = i.StationId,

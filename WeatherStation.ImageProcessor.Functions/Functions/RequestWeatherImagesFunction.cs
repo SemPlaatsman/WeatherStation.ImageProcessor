@@ -52,10 +52,10 @@ namespace WeatherStation.ImageProcessor.Functions.Functions
 
             if (request.NumberOfStations.HasValue)
             {
-                var validationResults = new List<ValidationResult>();
+                List<ValidationResult> validationResults = new();
                 if (!Validator.TryValidateObject(request, new ValidationContext(request), validationResults, true))
                 {
-                    var errorResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                    HttpResponseData errorResponse = req.CreateResponse(HttpStatusCode.BadRequest);
                     await errorResponse.WriteAsJsonAsync(new { errors = validationResults });
                     return errorResponse;
                 }
@@ -64,11 +64,11 @@ namespace WeatherStation.ImageProcessor.Functions.Functions
             _logger.LogInformation("Requesting {numberOfStations} stations.",
                 request.NumberOfStations.HasValue ? request.NumberOfStations.Value : "all");
 
-            var jobId = await _jobInitiationFacade.InitiateWeatherJobAsync(
+            string jobId = await _jobInitiationFacade.InitiateWeatherJobAsync(
                 request.NumberOfStations,
                 cancellationToken);
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
+            HttpResponseData response = req.CreateResponse(HttpStatusCode.OK);
             await response.WriteAsJsonAsync(new { jobId });
 
             _logger.LogInformation("RequestWeatherImages function completed processing the request.");
