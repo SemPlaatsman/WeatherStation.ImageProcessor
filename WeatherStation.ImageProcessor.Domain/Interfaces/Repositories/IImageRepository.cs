@@ -10,5 +10,7 @@
 
         Task<IEnumerable<(string StationId, string Url)>> GetImagesForJobAsync(
             string jobId, CancellationToken cancellationToken = default);
+
+        string GenerateSasUrl(string blobPath);
     }
 }
