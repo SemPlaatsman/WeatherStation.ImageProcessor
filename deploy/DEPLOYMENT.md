@@ -44,7 +44,7 @@ Once Azure subscription access is restored:
    - Verifying queue processing functionality
 
 ## Must-Have Requirements Status
-All must-have requirements have been met:
+Current status of all must-have requirements:
 - ✅ Public API endpoints using HttpTrigger
 - ✅ Background processing using QueueTrigger
 - ✅ Blob Storage implementation for image storage
@@ -55,12 +55,31 @@ All must-have requirements have been met:
 - ✅ Bicep template created
 - ✅ Multiple queues for job processing
 - ❌ Azure deployment (prepared but pending subscription access)
+- ❌ Azure DevOps repository setup and access (blocked by subscription limitations)
+
+## Blocked Requirements
+The following requirements cannot be fulfilled due to Azure subscription limitations:
+
+1. Azure Deployment
+   - All infrastructure code and deployment scripts are prepared
+   - Deployment is blocked by subscription access
+
+2. Azure DevOps Repository Setup
+   - Organization creation requires an active Azure subscription
+   - Reviewer access cannot be granted without organization access
+   - Code remains available in GitHub repository
 
 ## Next Steps
-1. Restore Azure subscription access
-2. Execute the prepared deployment scripts
-3. Verify all functionality in the cloud environment
-4. Update documentation with actual endpoint URLs
+Once Azure subscription access is restored:
+1. Create Azure DevOps organization and project
+2. Import code from GitHub to Azure DevOps
+3. Grant reviewer access following provided instructions:
+   - Add reviewer as Visual Studio subscriber
+   - Enable External Guest Access
+   - Add reviewer as project administrator
+4. Execute the prepared deployment scripts
+5. Verify all functionality in the cloud environment
+6. Update documentation with actual endpoint URLs
 
 > [!IMPORTANT]
-> Note: The application's architecture and implementation are complete and verified in the local development environment. The only pending item is the actual deployment to Azure, which is blocked by temporary subscription access limitations.
+> The application's architecture and implementation are complete and verified in the local development environment. The outstanding requirements are blocked by Azure subscription access limitations. All necessary code, infrastructure definitions, and deployment scripts are prepared for immediate deployment once access is restored.
