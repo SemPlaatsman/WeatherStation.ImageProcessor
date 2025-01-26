@@ -4,7 +4,7 @@
 The Weather Station Image Processor application is currently fully functional locally but not deployed to Azure. This is due to temporary Azure subscription access limitations. The application is ready for deployment with all necessary infrastructure-as-code and deployment scripts prepared.
 
 ## Infrastructure Setup
-All required Azure infrastructure has been defined using Bicep templates (`/deploy/main.bicep`), which include:
+All required Azure infrastructure has been defined using Bicep templates (`main.bicep`), which include:
 - Azure Function App (.NET 8.0 Isolated worker model)
 - Storage Account with:
   - Two queues for job processing
@@ -13,7 +13,7 @@ All required Azure infrastructure has been defined using Bicep templates (`/depl
 - Application Insights for monitoring
 
 ## Deployment Prerequisites
-The following files are prepared and ready in the `/deploy` directory:
+The following files are prepared and ready in this directory:
 - `main.bicep`: Infrastructure as code definition
 - `parameters.json`: Configuration parameters for the deployment
 - `deploy.ps1`: PowerShell deployment script
@@ -35,7 +35,7 @@ Once Azure subscription access is restored:
 
 2. Run the deployment script:
    ```powershell
-   ./deploy/deploy.ps1 -ResourceGroupName "your-resource-group" -Location "westeurope" -UnsplashAccessKey "your-unsplash-key"
+   ./deploy.ps1 -ResourceGroupName "your-resource-group" -Location "westeurope" -UnsplashAccessKey "your-unsplash-key"
    ```
 
 3. Verify the deployment by:
@@ -62,4 +62,5 @@ All must-have requirements have been met:
 3. Verify all functionality in the cloud environment
 4. Update documentation with actual endpoint URLs
 
-*Note: The application's architecture and implementation are complete and verified in the local development environment. The only pending item is the actual deployment to Azure, which is blocked by temporary subscription access limitations.*
+> [!IMPORTANT]
+> Note: The application's architecture and implementation are complete and verified in the local development environment. The only pending item is the actual deployment to Azure, which is blocked by temporary subscription access limitations.
