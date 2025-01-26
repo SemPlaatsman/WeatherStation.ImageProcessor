@@ -1,5 +1,4 @@
 @baseUrl = http://localhost:7167
-# @baseUrl = TODO_REPLACE_LATER_WITH_URL
 
 ### Request Weather Images with specific number of stations
 POST {{baseUrl}}/RequestWeatherImages
