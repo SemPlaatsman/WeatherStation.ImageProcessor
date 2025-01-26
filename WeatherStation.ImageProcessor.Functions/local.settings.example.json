@@ -1,3 +1,15 @@
 {
-
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "Api:IncludeDetailedErrors": true,
+    "External:Unsplash:AccessKey": "your-unsplash-secret",
+    "Storage:TableStorageConnection": "UseDevelopmentStorage=true",
+    "Storage:JobTableName": "WeatherJobs",
+    "Storage:BlobStorageConnection": "UseDevelopmentStorage=true",
+    "Storage:QueueStorageConnection": "UseDevelopmentStorage=true",
+    "Storage:InitiationQueueName": "initiation-queue",
+    "Storage:ProcessingQueueName": "processing-queue"
+  }
 }

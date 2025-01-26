@@ -1,0 +1,12 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appName": {
+      "value": "weatherstation-func"
+    },
+    "unsplashAccessKey": {
+      "value": "70CC2dE1XGr_LZv9dLXBOfDQ8fbmKcEM2D40lUB3B10"
+    }
+  }
+}
