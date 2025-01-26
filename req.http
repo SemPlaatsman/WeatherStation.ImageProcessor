@@ -1,0 +1,47 @@
+@baseUrl = http://localhost:7167
+# @baseUrl = TODO_REPLACE_LATER_WITH_URL
+
+### Request Weather Images with specific number of stations
+POST {{baseUrl}}/RequestWeatherImages
+Content-Type: application/json
+
+{
+    "numberOfStations": 5
+}
+
+### Request Weather Images without specifying number of stations
+POST {{baseUrl}}/RequestWeatherImages
+Content-Type: application/json
+
+{
+}
+
+### Get Job Status
+@jobId = your-job-id-here
+GET {{baseUrl}}/jobs/{{jobId}}/status
+
+### Example responses for reference:
+
+# POST /RequestWeatherImages Response:
+# {
+#     "jobId": "123e4567-e89b-12d3-a456-426614174000"
+# }
+
+# GET /jobs/{jobId}/status Response:
+# {
+#     "status": "Processing",
+#     "progress": {
+#         "completed": 3,
+#         "total": 5
+#     },
+#     "images": [
+#         {
+#             "stationId": "STATION001",
+#             "url": "https://example.com/image1.jpg"
+#         },
+#         {
+#             "stationId": "STATION002",
+#             "url": "https://example.com/image2.jpg"
+#         }
+#     ]
+# }

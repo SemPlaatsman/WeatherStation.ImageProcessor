@@ -17,6 +17,7 @@ This project featured a wide array of requirements to were either a Must- or a C
         1. [`/RequestWeatherImages`](TODO_REPLACE_LATER_WITH_URL): Request a set of weather images; Returns a jobId.
         2. [`/jobs/{jobId}/status`](TODO_REPLACE_LATER_WITH_URL): Get the current status of the weather image processing queue. Can have status `Initiated`, `Processing`, or `Completed`. Will show the completed jobs.
 * `Provide HTTP files as API documentation.`
+    * The requests are present in the [`req.http`](./req.http) file.
 * `Create a fitting Bicep template (include the queues as well).`
 * `Add all files to Azure DevOps repo and add *REDACTED* to organization and project.`
 * `Create a deploy.ps1 script that publishes your code using the dotnet cli, creates the resources in azure using the Bicep template and deploys the function using the azure cli.`
