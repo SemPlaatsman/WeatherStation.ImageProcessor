@@ -7,4 +7,4 @@
 Deployment documentation and instructions can be found in [deploy/DEPLOYMENT.md](deploy/DEPLOYMENT.md).
 
 ## Requirements
-In the [requirements](REQUIREMENTS) page, all requirements can be found for this project and how they were fulfilled.
+In the [requirements](REQUIREMENTS.md) page, all requirements can be found for this project and how they were fulfilled.
